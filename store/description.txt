@@ -1,0 +1,115 @@
+==============================
+ストア説明文（Description）
+==============================
+
+Your personal prompt library — save once, insert anywhere with one click.
+Works on ChatGPT, Claude, Gemini, and Perplexity. Variables included.
+$9.99 one-time. No subscription. No marketplace. Your prompts stay yours.
+
+★ Save reusable prompt templates with one click
+★ Insert into ChatGPT, Claude, Gemini, and Perplexity instantly
+★ Use {variables} to reuse the same prompt with different inputs
+★ All data stays on your device — nothing is uploaded
+★ No subscription, no account, no ads — buy once, use forever
+
+✦ Why Prompt Snippets?
+If you use AI chatbots every day, you probably paste the same prompt over and over: blog outlines, code reviews, email rewrites, summaries. Prompt Snippets keeps your best prompts in one searchable library and inserts them into ChatGPT, Claude, Gemini, or Perplexity with a single click.
+
+✦ Local-only by design
+Unlike AIPRM and similar tools, Prompt Snippets does not show ads, does not require sign-in, and does not sync your prompts to any cloud. Built for writers, marketers, support agents, and anyone who handles confidential prompts.
+
+✦ Variables that save real time
+Mark dynamic parts with curly braces like {topic}, {tone}, or {audience}. When you insert the snippet, a quick dialog asks for the value — and it remembers your last input so you do not retype the same things.
+
+✦ Pro plan ($9.99 one-time)
+• Unlimited snippets (Free is limited to 5)
+• Unlimited variables per snippet (Free supports 1)
+• JSON import for migrating from existing libraries
+• Categories and tags
+
+✦ How to insert
+1. Click the Prompt Snippets icon (or right-click any text field)
+2. Pick a snippet from the list
+3. The prompt is inserted directly into ChatGPT / Claude / Gemini / Perplexity
+4. Or, if the page does not support direct insertion, the snippet is copied to your clipboard automatically
+
+Made by the same team behind QuickReply Templates and Quick Contact Notes.
+
+==============================
+ホームページURL
+==============================
+https://pandaigo.github.io/prompt-snippets/
+
+==============================
+サポートURL（メールで対応するならプライバシーポリシーURLでOK）
+==============================
+https://pandaigo.github.io/prompt-snippets/store/privacy-policy.html
+
+==============================
+単一用途の説明
+==============================
+This extension has a single purpose: save reusable prompt templates and insert them into the input field of supported AI chat services (ChatGPT, Claude, Gemini, Perplexity) with one click.
+
+==============================
+storage が必要な理由
+==============================
+Required to save the user's prompt templates, categories, and variable history locally on the device using chrome.storage.local. No data is sent to any external server.
+
+==============================
+activeTab が必要な理由
+==============================
+Required to insert the selected prompt into the active tab's input field when the user explicitly clicks the extension icon, a snippet in the popup, or a context menu item. Combined with the "scripting" permission, this avoids requesting broad host permissions across many AI sites.
+
+==============================
+scripting が必要な理由
+==============================
+Required to inject the prompt-insertion code into the active tab only after the user explicitly chooses to insert a snippet. No code is injected automatically — only on user action.
+
+==============================
+contextMenus が必要な理由
+==============================
+Required to add a "Prompt Snippets" submenu to the right-click menu on editable text fields, allowing the user to insert any saved snippet directly from the context menu.
+
+==============================
+clipboardWrite が必要な理由
+==============================
+Used as a fallback when direct text insertion is not possible (e.g., on pages that block input modification). In this case, the snippet is copied to the clipboard so the user can paste it manually with Ctrl+V.
+
+==============================
+ホスト権限が必要な理由（content_scripts の matches）
+==============================
+https://extensionpay.com/*:
+Required by ExtensionPay (the payment provider) to detect when a payment is completed. The ExtPay.js content script runs only on the ExtensionPay checkout page to communicate payment status back to the extension.
+
+==============================
+リモートコードを使用しているか
+==============================
+No. This extension does not use any remotely hosted code. All scripts (including ExtPay.js) are bundled within the extension package.
+
+==============================
+ユーザーデータの収集について
+==============================
+以下すべてチェックなし（収集しない）:
+- [ ] 個人を特定できる情報
+- [ ] 健康に関する情報
+- [ ] 財務状況や支払いに関する情報
+- [ ] 認証に関する情報
+- [ ] 個人的コミュニケーション
+- [ ] 位置情報
+- [ ] ウェブ履歴
+- [ ] ユーザーのアクティビティ
+- [ ] ウェブサイトのコンテンツ
+
+補足: All user data — including prompt templates, variable values, and settings — is stored locally on the user's device using chrome.storage.local. No analytics, tracking, or telemetry is included. No user accounts are required. The only external communication is an anonymous installation ID sent to ExtensionPay (extensionpay.com) for license verification when the user purchases the Pro upgrade.
+
+==============================
+開示の表明（すべてチェックを入れる）
+==============================
+- [x] 私は以下の開示が正しいものであることを表明します。私は、承認されている以外の用途で第三者にユーザーデータを販売、転送しません
+- [x] 私はアイテムの唯一の目的と関係のない目的でユーザーデータを使用または転送しません
+- [x] 私は信用力を判断する目的または融資目的でユーザーデータを使用または転送しません
+
+==============================
+プライバシーポリシーのURL
+==============================
+https://pandaigo.github.io/prompt-snippets/store/privacy-policy.html

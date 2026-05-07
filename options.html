@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prompt Snippets — Manage</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <img src="icons/icon48.png" alt="" width="28" height="28">
+      <h1>Prompt Snippets</h1>
+    </div>
+    <div class="header-actions">
+      <span id="quota"></span>
+      <button id="btn-import" class="btn-secondary btn-sm">Import</button>
+      <button id="btn-export" class="btn-secondary btn-sm">Export</button>
+      <input type="file" id="file-import" accept=".json" hidden>
+    </div>
+  </header>
+
+  <main>
+    <aside id="list-panel">
+      <div class="list-header">
+        <button id="btn-add" class="btn-primary btn-block">+ New Snippet</button>
+        <input type="text" id="search" placeholder="Search...">
+      </div>
+      <div id="snippet-list"></div>
+    </aside>
+
+    <section id="edit-panel">
+      <div id="edit-empty" class="edit-empty">
+        <p>Select a snippet on the left, or click <b>+ New Snippet</b>.</p>
+      </div>
+
+      <form id="edit-form" class="hidden">
+        <div class="form-row">
+          <label for="f-name">Name</label>
+          <input type="text" id="f-name" maxlength="60" required>
+        </div>
+
+        <div class="form-row">
+          <label for="f-category">Category</label>
+          <input type="text" id="f-category" maxlength="30" placeholder="e.g. Writing, Email, Coding" list="cat-options">
+          <datalist id="cat-options"></datalist>
+        </div>
+
+        <div class="form-row">
+          <label for="f-content">Content</label>
+          <textarea id="f-content" rows="14" required placeholder="Write your prompt here. Use {variable} for inputs you fill in at insert time."></textarea>
+        </div>
+
+        <div class="var-helper">
+          <span class="hint-label">Auto:</span>
+          <button type="button" class="var-btn" data-var="{date}">{date}</button>
+          <button type="button" class="var-btn" data-var="{today}">{today}</button>
+          <span class="hint-label hint-input">Examples:</span>
+          <button type="button" class="var-btn" data-var="{topic}">{topic}</button>
+          <button type="button" class="var-btn" data-var="{audience}">{audience}</button>
+          <button type="button" class="var-btn" data-var="{tone}">{tone}</button>
+          <button type="button" class="var-btn" data-var="{language}">{language}</button>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="btn-delete" class="btn-danger">Delete</button>
+          <div class="actions-right">
+            <button type="button" id="btn-cancel" class="btn-secondary">Cancel</button>
+            <button type="submit" class="btn-primary">Save</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <div id="upgrade-modal" class="hidden">
+    <div class="upgrade-card">
+      <h2>Unlock Prompt Snippets Pro</h2>
+      <p id="upgrade-msg">Free is limited to 5 snippets and 1 variable per snippet.</p>
+      <ul>
+        <li>Unlimited snippets</li>
+        <li>Unlimited variables per snippet</li>
+        <li>JSON import (Export is free for everyone)</li>
+        <li>Categories &amp; tags</li>
+      </ul>
+      <button id="btn-upgrade" class="btn-primary btn-wide">Upgrade — $9.99 one-time</button>
+      <button id="btn-upgrade-close" class="btn-secondary btn-wide">Maybe later</button>
+    </div>
+  </div>
+
+  <div id="confirm-modal" class="hidden">
+    <div class="upgrade-card">
+      <h2 id="confirm-title">Are you sure?</h2>
+      <p id="confirm-msg"></p>
+      <button id="btn-confirm-ok" class="btn-danger btn-wide">Yes, delete</button>
+      <button id="btn-confirm-cancel" class="btn-secondary btn-wide">Cancel</button>
+    </div>
+  </div>
+
+  <script src="ExtPay.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

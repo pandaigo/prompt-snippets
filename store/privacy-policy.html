@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Prompt Snippets</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      color: #1a1a2e;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    h2 { font-size: 18px; margin-top: 32px; margin-bottom: 8px; }
+    .updated { color: #888; font-size: 14px; margin-bottom: 32px; }
+    ul { padding-left: 24px; }
+    li { margin-bottom: 6px; }
+    a { color: #4a90d9; }
+    code { background: #f0f4f8; padding: 1px 6px; border-radius: 4px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: 2026-05-07</p>
+
+  <p><strong>Prompt Snippets</strong> ("the Extension") is a Chrome browser extension that lets you save reusable prompt templates and insert them into AI chat services like ChatGPT, Claude, Gemini, and Perplexity with one click.</p>
+
+  <h2>Data Collection</h2>
+  <p>The Extension does <strong>not</strong> collect, transmit, or share any personal data or prompt content. Specifically:</p>
+  <ul>
+    <li>Your prompt templates and variable values are stored only on your local device.</li>
+    <li>No prompts, variables, or page content are ever sent to any server.</li>
+    <li>No analytics, tracking, or telemetry is included.</li>
+    <li>No user accounts are required.</li>
+    <li>No cookies are set by the Extension.</li>
+  </ul>
+
+  <h2>Data Storage</h2>
+  <p>All user data — prompt templates, categories, variable history, and settings — is stored locally on your device using the Chrome Storage API (<code>chrome.storage.local</code>). This data never leaves the device.</p>
+
+  <h2>Permissions</h2>
+  <p>The Extension requests the following permissions:</p>
+  <ul>
+    <li><strong>storage</strong> — To save your prompt templates and settings locally on the device.</li>
+    <li><strong>activeTab</strong> — Required only when you click the extension icon or a snippet, to access the current tab's input field for one-click insertion. The Extension does not read the rest of the page.</li>
+    <li><strong>scripting</strong> — Required to inject the insertion code into the active tab when you choose to insert a snippet. Code is only injected after you explicitly request insertion.</li>
+    <li><strong>contextMenus</strong> — To add a "Prompt Snippets" right-click menu item on text input fields, so you can insert snippets directly from the right-click menu.</li>
+    <li><strong>clipboardWrite</strong> — Used as a fallback when direct insertion is not possible (some pages block input access). The selected snippet is then copied to the clipboard so you can paste it manually with Ctrl+V.</li>
+  </ul>
+
+  <h2>Third-Party Services</h2>
+  <p>The Extension uses <strong>ExtensionPay</strong> (extensionpay.com) to process one-time payments and verify Pro license status. ExtensionPay receives a randomly generated installation ID for the sole purpose of license verification. <strong>Your prompt templates and variable values are never transmitted to ExtensionPay or any third party.</strong> Payment itself is processed by Stripe via ExtensionPay; the Extension does not handle credit card data.</p>
+
+  <h2>Changes to This Policy</h2>
+  <p>If this policy is updated, the changes will be posted on this page with an updated date.</p>
+
+  <h2>Contact</h2>
+  <p>If you have questions about this privacy policy, please contact us at: <a href="mailto:microforge.hq@gmail.com">microforge.hq@gmail.com</a></p>
+</body>
+</html>

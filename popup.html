@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="main-view">
+    <header>
+      <div class="header-left">
+        <img src="icons/icon48.png" alt="" width="22" height="22">
+        <h1>Prompt Snippets</h1>
+      </div>
+      <div class="header-actions">
+        <button id="btn-options" class="btn-icon" title="Manage snippets">⚙</button>
+      </div>
+    </header>
+
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Search snippets..." autocomplete="off">
+    </div>
+
+    <div id="cat-bar" class="cat-bar"></div>
+
+    <div id="snippet-list"></div>
+
+    <footer>
+      <div id="quota-info"></div>
+      <button id="btn-add" class="btn-sm btn-primary">+ New</button>
+    </footer>
+    <div class="footer-credit">From the makers of QuickReply Templates</div>
+    <div id="fail-banner" class="fail-banner hidden"></div>
+  </div>
+
+  <div id="upgrade-modal" class="hidden">
+    <div class="upgrade-card">
+      <h2>Unlock Prompt Snippets Pro</h2>
+      <p id="upgrade-msg">Free plan is limited to 5 snippets and 1 variable per snippet.</p>
+      <ul>
+        <li>Unlimited snippets</li>
+        <li>Unlimited variables per snippet</li>
+        <li>JSON import (Export is free for everyone)</li>
+        <li>Categories &amp; tags</li>
+      </ul>
+      <button id="btn-upgrade" class="btn-primary btn-wide">Upgrade — $9.99 one-time</button>
+      <button id="btn-upgrade-close" class="btn-secondary btn-wide">Maybe later</button>
+    </div>
+  </div>
+
+  <script src="ExtPay.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
