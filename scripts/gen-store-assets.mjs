@@ -40,16 +40,19 @@ const promoSmallSvg = `
   <rect x="0" y="0" width="440" height="280" fill="url(#bg)"/>
 
   <!-- 主見出し（1行・220x140縮小でも読める50pt・440px幅に収まる） -->
-  <text x="220" y="92" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="50" font-weight="900" fill="#fff" letter-spacing="-1">Save AI Prompts.</text>
+  <text x="220" y="86" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="50" font-weight="900" fill="#fff" letter-spacing="-1">Save AI Prompts.</text>
 
-  <!-- サブコピー（短く・横幅収まる） -->
-  <text x="220" y="132" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="22" font-weight="700" fill="#cbd5e1" letter-spacing="-0.3">Insert in 1 click. Reuse forever.</text>
+  <!-- サブコピー -->
+  <text x="220" y="124" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#cbd5e1" letter-spacing="-0.3">Insert in 1 click. Reuse forever.</text>
 
   <!-- 差し色 No（CTRフック・赤） -->
-  <text x="220" y="188" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="36" font-weight="900" letter-spacing="-1" xml:space="preserve"><tspan fill="#EF4444">No </tspan><tspan fill="#fff">Subscription.</tspan></text>
+  <text x="220" y="178" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="900" letter-spacing="-1" xml:space="preserve"><tspan fill="#EF4444">No </tspan><tspan fill="#fff">Subscription.</tspan></text>
 
-  <!-- 対応サービス -->
-  <text x="220" y="234" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="17" font-weight="600" fill="#94A3B8" letter-spacing="0.3">ChatGPT · Claude · Gemini · Perplexity</text>
+  <!-- 対応サービス（縮小耐性のため少し大きめ） -->
+  <text x="220" y="218" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#94A3B8" letter-spacing="0.3">ChatGPT · Claude · Gemini · Perplexity</text>
+
+  <!-- QuickReply 作者明記（ペルソナC: ファミリー感 + 信頼ブースター・下端から余白確保） -->
+  <text x="220" y="248" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="500" fill="#94A3B8" letter-spacing="0.2">From the makers of QuickReply Templates</text>
 </svg>`;
 
 writeFileSync(join(outDir, 'promo-small-440x280.svg'), promoSmallSvg);
@@ -72,12 +75,13 @@ console.log('Generated store/promo-small-440x280.png + .svg');
 //   'fullscreen' = 800x700 全体を縮小 (popup を覆うモーダル等を撮影した時)
 const targets = [
   // 機能 → 課金 順（lessons-learned）
-  { src: '02-popup-list.png',   caption: 'Your personal library of AI prompts — organized by category.',          mode: 'popup' },
+  // cropHeight: popup mode で抽出する高さ（指定なしは500px。コンテンツ高に合わせて調整）
+  { src: '02-popup-list.png',   caption: 'Your personal library of AI prompts — organized by category.',          mode: 'popup', cropHeight: 540 },
   { src: '07-options-edit.png', caption: 'Build prompts with {variables} for ChatGPT, Claude, Gemini & Perplexity.', mode: 'fullscreen' },
-  { src: '03-popup-search.png', caption: 'Search instantly. Press Enter to insert into your AI chat.',            mode: 'popup' },
-  { src: '04-popup-dark.png',   caption: 'Dark mode included. Your prompts stay 100% on your device.',            mode: 'popup' },
-  // upgrade-modal は popup 中央に表示されるため fullscreen で全体縮小（はみ出し回避）
-  { src: '05-upgrade-modal.png', caption: 'Just $9.99 once. No subscription. No ads. No marketplace.',            mode: 'fullscreen' }
+  { src: '03-popup-search.png', caption: 'Search instantly. Press Enter to insert into your AI chat.',            mode: 'popup', cropHeight: 480 },
+  { src: '04-popup-dark.png',   caption: 'Dark mode included. Your prompts stay 100% on your device.',            mode: 'popup', cropHeight: 480 },
+  // upgrade-modal は popup の中で覆い被さるモーダル。popup mode で高さ拡張して全体収める
+  { src: '05-upgrade-modal.png', caption: 'Just $9.99 once. No subscription. No ads. No marketplace.',            mode: 'popup', cropHeight: 600 }
 ];
 
 const screenshotsDir = join(root, 'screenshots');
@@ -96,19 +100,25 @@ if (!existsSync(screenshotsDir)) {
 
     let popupBuffer;
     if (t.mode === 'fullscreen') {
-      // 全画面（モーダル等）: 800x700 を 800x680 にフィット
+      // 全画面（モーダル等）: 800x700 を 1100x800 弱にフィット拡大して他スクショと縮尺を揃える
       popupBuffer = await sharp(srcPath)
-        .resize(800, 680, { fit: 'inside', background: '#fff' })
+        .resize(1100, 770, { fit: 'inside', background: '#fff' })
         .png()
         .toBuffer();
     } else {
-      // popup のみ: 左上 380x500 を抽出して 1.3倍拡大
+      // popup のみ: 左上を抽出して拡大。e2e は popup 実寸 viewport なので画像サイズに合わせる
       const meta = await sharp(srcPath).metadata();
-      const cropWidth = Math.min(380, meta.width || 380);
-      const cropHeight = Math.min(500, meta.height || 700);
+      const srcWidth = meta.width || 380;
+      const srcHeight = meta.height || 600;
+      const cropWidth = Math.min(t.cropWidth || srcWidth, srcWidth);
+      const cropHeight = Math.min(t.cropHeight || srcHeight, srcHeight);
+      // 縦が 660px を超えないようスケールを動的調整（キャプション帯110px + 下マージン30px = 140）
+      const maxScaleW = 1.4;
+      const maxScaleH = 660 / cropHeight;
+      const scale = Math.min(maxScaleW, maxScaleH);
       popupBuffer = await sharp(srcPath)
         .extract({ left: 0, top: 0, width: cropWidth, height: cropHeight })
-        .resize({ width: Math.round(cropWidth * 1.3) })
+        .resize({ width: Math.round(cropWidth * scale) })
         .png()
         .toBuffer();
     }
@@ -126,7 +136,7 @@ if (!existsSync(screenshotsDir)) {
   </defs>
   <rect x="0" y="0" width="1280" height="800" fill="url(#bg)"/>
   <rect x="0" y="0" width="1280" height="100" fill="#000" opacity="0.25"/>
-  <text x="640" y="62" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="30" font-weight="800" fill="#fff">${captionEsc}</text>
+  <text x="640" y="62" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800" fill="#fff">${captionEsc}</text>
 </svg>`;
 
     const bgBuffer = await sharp(Buffer.from(compositeSvg)).png().toBuffer();
@@ -159,7 +169,7 @@ if (!existsSync(screenshotsDir)) {
   </defs>
   <rect x="0" y="0" width="1280" height="800" fill="url(#bg-${i + 1})"/>
   <rect x="0" y="0" width="1280" height="100" fill="#000" opacity="0.25"/>
-  <text x="640" y="62" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="30" font-weight="800" fill="#fff">${captionEsc}</text>
+  <text x="640" y="62" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800" fill="#fff">${captionEsc}</text>
   <image xlink:href="${outBaseName}-popup.png" x="${Math.round(popupLeft)}" y="${Math.round(popupTop)}" width="${popupMeta.width}" height="${popupMeta.height}"/>
 </svg>`;
     writeFileSync(join(cwsScreensDir, `${outBaseName}.svg`), svgVersion);

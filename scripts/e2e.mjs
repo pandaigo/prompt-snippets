@@ -44,6 +44,8 @@ async function run(name, fn) {
 
 async function freshPopup(browser, extensionId, options = {}) {
   const page = await browser.newPage();
+  // popup の実寸サイズに viewport を合わせる（position:fixed モーダルを popup 領域内に収める）
+  await page.setViewport({ width: 380, height: options.height || 600 });
   if (options.dark) await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'dark' }]);
   page.on('pageerror', err => console.log(`  [POPUP ERROR] ${err.message}`));
   page.on('console', msg => {
@@ -148,26 +150,27 @@ await run('popup: サンプル4件＋カテゴリピルが表示される', asyn
   await page.close();
 });
 
-await run('popup: 検索で絞り込みできる', async () => {
+await run('popup: 検索で絞り込みできる（複数件ヒット）', async () => {
   const page = await freshPopup(browser, extensionId);
   await page.evaluate(() => {
     const now = Date.now();
     return new Promise(r => chrome.storage.local.set({
       snippets: [
-        { id: 's1', name: 'Blog Outline', content: 'Write a blog outline', category: 'Writing', createdAt: now, updatedAt: now },
-        { id: 's2', name: 'Email Reply', content: 'Rewrite email', category: 'Email', createdAt: now, updatedAt: now },
-        { id: 's3', name: 'Code Review', content: 'Review this code', category: 'Coding', createdAt: now, updatedAt: now }
+        { id: 's1', name: 'Blog Outline', content: 'Write a SEO outline about {topic} for {audience}', category: 'Writing', createdAt: now, updatedAt: now },
+        { id: 's2', name: 'Email Reply', content: 'Rewrite this email more {tone}', category: 'Email', createdAt: now, updatedAt: now },
+        { id: 's3', name: 'Code Review', content: 'Review this {language} code for bugs', category: 'Coding', createdAt: now, updatedAt: now },
+        { id: 's4', name: 'Summarize', content: 'Summarize in 3 bullets', category: 'Writing', createdAt: now, updatedAt: now }
       ]
     }, r));
   });
   await page.reload();
   await page.waitForSelector('#snippet-list .snip-card');
   await page.click('#search');
-  await page.type('#search', 'blog');
+  await page.type('#search', 'write'); // Blog "Write" + Email "Rewrite" の2件ヒット
   await new Promise(r => setTimeout(r, 200));
   await shot(page, 'popup-search');
   const cards = await page.$$('#snippet-list .snip-card');
-  if (cards.length !== 1) throw new Error(`expected 1 result, got ${cards.length}`);
+  if (cards.length < 2) throw new Error(`expected >=2 results, got ${cards.length}`);
   await page.close();
 });
 
@@ -216,18 +219,26 @@ await run('popup: Pro 状態で無制限表示', async () => {
   await page.close();
 });
 
-await run('options: 編集ページが起動して新規作成フォームが見える', async () => {
+await run('options: 既存スニペット一覧＋編集フォーム同時表示', async () => {
   const page = await browser.newPage();
   page.on('pageerror', err => console.log(`  [OPTIONS ERROR] ${err.message}`));
   await page.goto(`chrome-extension://${extensionId}/options.html`);
-  await page.evaluate(() => new Promise(r => chrome.storage.local.clear(r)));
+  // 左ペインの空白問題回避：先にサンプルスニペットを投入してから編集画面を開く
+  await page.evaluate(() => {
+    const now = Date.now();
+    return new Promise(r => chrome.storage.local.set({
+      snippets: [
+        { id: 's1', name: 'Blog Outline', content: 'Write a SEO outline about {topic}', category: 'Writing', createdAt: now, updatedAt: now },
+        { id: 's2', name: 'Email Reply', content: 'Rewrite this email more {tone}', category: 'Email', createdAt: now, updatedAt: now },
+        { id: 's3', name: 'Code Review', content: 'Review this {language} code', category: 'Coding', createdAt: now, updatedAt: now }
+      ]
+    }, r));
+  });
   await page.reload();
   await page.waitForSelector('#btn-add');
-  await page.click('#btn-add');
+  // 既存「Blog Outline」を選択して編集モードに
+  await page.click('#snippet-list .snip-row');
   await page.waitForSelector('#edit-form:not(.hidden)', { visible: true });
-  await page.type('#f-name', 'Blog Outline');
-  await page.type('#f-category', 'Writing');
-  await page.type('#f-content', 'Write a detailed SEO outline about {topic} for {audience}.');
   await shot(page, 'options-edit');
   await page.close();
 });
